@@ -1,4 +1,5 @@
 import click
+import readline  # noqa: F401
 
 from rich.console import Console
 

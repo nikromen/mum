@@ -1,12 +1,24 @@
 import click
-import readline  # noqa: F401
+import readline
 
 from rich.console import Console
 
-from mum.command import Command
+from mum.command import Command, MAP_COMMAND_TO_FUNC
 from mum.constants import PROMPT
 from mum.enums import CommandEnum
 from mum.todo_file import TodoFile
+
+
+def auto_completion(incomplete_text, state):
+    commands = [
+        command
+        for command in MAP_COMMAND_TO_FUNC.keys()
+        if command.startswith(incomplete_text)
+    ]
+    if state < len(commands):
+        return commands[state]
+
+    return None
 
 
 class Mum:
@@ -26,6 +38,8 @@ class Mum:
 def mum() -> None:
     todo_file = TodoFile()
     app = Mum(todo_file)
+    readline.parse_and_bind("tab: complete")
+    readline.set_completer(auto_completion)
     app.run()
 
 

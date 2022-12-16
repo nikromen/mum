@@ -6,8 +6,8 @@ from typing import Callable, Any, Optional
 from rich.console import Console
 from rich.table import Table
 
-from mum.constants import MAP_INT_TO_WEEKDAY, TD_DN_LEN, MIN_EDIT_LEN
-from mum.enums import Section
+from mum.constants import MAP_INT_TO_WEEKDAY, TD_DN_LEN, MIN_EDIT_LEN, MIN_MOVE_LEN
+from mum.enums import Section, CommandEnum
 from mum.todo_file import TodoFile
 
 
@@ -136,7 +136,7 @@ class Command:
         section = self._todo_file.get_section(Section[tail[0].lower()])
         return tail[1] in section.keys()
 
-    @map_command(command="e")
+    @map_command(command=CommandEnum.edit)
     def _edit(self, tail: list[str]) -> bool:
         # e monday 2 edited text
         if not self._check_edit_command(tail):
@@ -145,6 +145,28 @@ class Command:
         text_to_replace_with = " ".join(tail[2:])
         section = self._todo_file.get_section(Section[tail[0].lower()])
         section[tail[1]] = text_to_replace_with
+        return True
+
+    @map_command
+    def _mv(self, tail: list[str]) -> bool:
+        # mv tuesday 3 friday
+        if len(tail) < MIN_MOVE_LEN:
+            return False
+
+        from_ = tail[0]
+        section_key = tail[1]
+        to = tail[2]
+        if (
+            not all(member.upper() in Section for member in [from_, to])
+            or not section_key.isnumeric()
+        ):
+            return False
+
+        from_section = self._todo_file.get_section(Section[from_.lower()])
+        to_move = from_section[section_key]
+        from_section.pop(section_key)
+        to_section = self._todo_file.get_section(Section[to.lower()])
+        to_section[str(self._max_section_number(to_section) + 1)] = to_move
         return True
 
     def run_command(self) -> bool:

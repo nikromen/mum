@@ -82,6 +82,11 @@ Output of this command:
 - e.g.: `e monday 1 this is edited text` will edit first item in monday section to "this is edited
   text"
 
+`mv section number_of_item section`
+
+- moves item from one section to another
+- e.g.: `mv friday 2 monday` will move second item from friday section to monday section
+
 `rst`
 
 - once you told your manager on standup/mtg/whatever what have you done, you can start new blank

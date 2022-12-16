@@ -28,3 +28,4 @@ class CommandEnum(str, Enum, metaclass=EnumContainsItemMeta):
     reset = "rst"
     quit = "q"
     edit = "e"
+    move = "mv"

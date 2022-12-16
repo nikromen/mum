@@ -63,10 +63,7 @@ class Command:
         table.add_column(fst_command)
         section = self._todo_file.get_section(Section[fst_command.lower()])
         for key, value in section.items():
-            if fst_command == Section.todo.value.lower().capitalize():
-                table.add_row(f"{key}: {value}")
-                continue
-            table.add_row(value)
+            table.add_row(f"{key}: {value}")
 
         return True
 

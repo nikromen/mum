@@ -7,7 +7,7 @@ from rich.console import Console
 from rich.table import Table
 
 from mum.constants import MAP_INT_TO_WEEKDAY
-from mum.enums import CommandEnum, Section
+from mum.enums import Section
 from mum.todo_file import TodoFile
 
 
@@ -80,8 +80,17 @@ class Command:
         return False
 
     @map_command
-    def _rst(self) -> bool:
+    def _rst(self, tail: list[str]) -> bool:
+        prev_todo_section = self._todo_file.get_section(Section.todo)
         self._todo_file.bootstrap_todo_file()
+
+        if tail and tail[0] == "all":
+            return True
+
+        curr_section = self._todo_file.get_section(Section.todo)
+        for i, item in prev_todo_section.items():
+            curr_section[i] = item
+
         return True
 
     @staticmethod
@@ -126,7 +135,4 @@ class Command:
             return False
 
         tail = self._command[1 : len(self._command)]
-        if tail or fst_command == CommandEnum.ls:
-            return command_func(self, tail)  # type: ignore
-
-        return command_func(self)
+        return command_func(self, tail)  # type: ignore

@@ -46,3 +46,6 @@ class TodoFile:
 
     def get_sections(self) -> list[str]:
         return self._config.sections()
+
+    def set_section(self):
+        pass

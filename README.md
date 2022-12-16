@@ -80,6 +80,7 @@ Output of this command:
 
 - once you told your manager on standup/mtg/whatever what have you done, you can start new blank
   session via `rst` command which will initialize new blank week.
+- Warning! The TODO section will not be removed! To remove even TODO section, use `rst all`
 
 `q`
 

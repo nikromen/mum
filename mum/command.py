@@ -6,7 +6,7 @@ from typing import Callable, Any, Optional
 from rich.console import Console
 from rich.table import Table
 
-from mum.constants import MAP_INT_TO_WEEKDAY
+from mum.constants import MAP_INT_TO_WEEKDAY, TD_DN_LEN, MIN_EDIT_LEN
 from mum.enums import Section
 from mum.todo_file import TodoFile
 
@@ -112,7 +112,7 @@ class Command:
             return False
 
         if tail[0] == "dn":
-            if len(tail) != 2 or not tail[1].isnumeric():
+            if len(tail) != TD_DN_LEN or not tail[1].isnumeric():
                 return False
 
             removed = (
@@ -123,6 +123,28 @@ class Command:
         section = self._todo_file.get_section(Section.todo)
         section[str(self._max_section_number(section) + 1)] = " ".join(tail)
         self._todo_file.write_config_to_file()
+        return True
+
+    def _check_edit_command(self, tail: list[str]) -> bool:
+        if (
+            len(tail) < MIN_EDIT_LEN
+            or tail[0].upper() not in Section
+            or not tail[1].isnumeric()
+        ):
+            return False
+
+        section = self._todo_file.get_section(Section[tail[0].lower()])
+        return tail[1] in section.keys()
+
+    @map_command(command="e")
+    def _edit(self, tail: list[str]) -> bool:
+        # e monday 2 edited text
+        if not self._check_edit_command(tail):
+            return False
+
+        text_to_replace_with = " ".join(tail[2:])
+        section = self._todo_file.get_section(Section[tail[0].lower()])
+        section[tail[1]] = text_to_replace_with
         return True
 
     def run_command(self) -> bool:

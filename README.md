@@ -76,6 +76,12 @@ Output of this command:
 
 - adds a text you specified to a corresponding day section
 
+`e section number_of_item [text]`
+
+- edits item of section
+- e.g.: `e monday 1 this is edited text` will edit first item in monday section to "this is edited
+  text"
+
 `rst`
 
 - once you told your manager on standup/mtg/whatever what have you done, you can start new blank

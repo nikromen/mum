@@ -13,3 +13,7 @@ MAP_INT_TO_WEEKDAY = {
     5: "saturday",
     6: "sunday",
 }
+
+
+MIN_EDIT_LEN = 3
+TD_DN_LEN = 2

@@ -1,7 +1,12 @@
-from enum import Enum
+from enum import Enum, EnumMeta
 
 
-class Section(str, Enum):
+class EnumContainsItemMeta(EnumMeta):
+    def __contains__(cls, item: str) -> bool:  # type: ignore
+        return item in cls.__members__.values()
+
+
+class Section(str, Enum, metaclass=EnumContainsItemMeta):
     # DAYS
     monday = "MONDAY"
     tuesday = "TUESDAY"
@@ -16,9 +21,10 @@ class Section(str, Enum):
     todo = "TODO"
 
 
-class CommandEnum(str, Enum):
+class CommandEnum(str, Enum, metaclass=EnumContainsItemMeta):
     ls = "ls"
     todo = "td"
     done = "dn"
     reset = "rst"
     quit = "q"
+    edit = "e"

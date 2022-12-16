@@ -47,5 +47,7 @@ class TodoFile:
     def get_sections(self) -> list[str]:
         return self._config.sections()
 
-    def set_section(self):
-        pass
+    def reorder_ids_of_section(self, section: Section) -> None:
+        section = self._config[section]
+        for new_key, old_key in enumerate(section.keys(), start=1):
+            section[str(new_key)] = section.pop(old_key)

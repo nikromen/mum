@@ -118,6 +118,7 @@ class Command:
             removed = (
                 self._todo_file.get_section(Section.todo).pop(tail[1], None).split(" ")
             )
+            self._todo_file.reorder_ids_of_section(Section.todo)
             return self._dn(removed)
 
         section = self._todo_file.get_section(Section.todo)
@@ -162,11 +163,15 @@ class Command:
         ):
             return False
 
-        from_section = self._todo_file.get_section(Section[from_.lower()])
+        from_section_enum = Section[from_.lower()]
+        from_section = self._todo_file.get_section(from_section_enum)
         to_move = from_section[section_key]
         from_section.pop(section_key)
+
         to_section = self._todo_file.get_section(Section[to.lower()])
         to_section[str(self._max_section_number(to_section) + 1)] = to_move
+
+        self._todo_file.reorder_ids_of_section(from_section_enum)
         return True
 
     def run_command(self) -> bool:

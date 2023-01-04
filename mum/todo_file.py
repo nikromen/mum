@@ -42,8 +42,6 @@ class TodoFile:
         return config
 
     def get_section(self, section: Section) -> SectionProxy:
-        # get fresh file every time just in case more mums are opened
-        self._config = self._get_todo_file()
         return self._config[section]
 
     def get_sections(self) -> list[str]:
